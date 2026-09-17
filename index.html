@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="NgRA7h2i2gxOkjakcccYnZ">
+<head data-page-node-id="u6GbzW2Exks1ranO1Gsutw">
+  <meta charset="UTF-8" data-page-node-id="PDMAIrFhx3KyORZJFhByT1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="c2TKCzwHBTzINUHYqlCWnw" />
+  <title>公网聊天室 · Public Chat</title>
+  <link rel="stylesheet" href="style.css" data-page-node-id="NMK22ShkoxeDTe36dcDPIP" />
+</head>
+<body data-page-node-id="RVPHla2mU4Jr4ctFdAyWIt">
+  <div class="app" data-page-node-id="ofTZFuDFZKtII7ujJer030">
+    <!-- 顶部栏 -->
+    <header class="topbar" data-page-node-id="Dh6rkoEenB7wGuHfAEMwYI">
+      <div class="brand" data-page-node-id="EQuVFirWvxuFh9eNqYJis3">
+        <span class="logo" data-page-node-id="gnP5zc6eKEGWkaUbm59Ky5">💬</span>
+        <div data-page-node-id="aRYhaho6fpJElW29xOBpXP">
+          <h1 data-page-node-id="FRarD97O1YXYVf5rzoqBGb">公网聊天室</h1>
+          <p class="subtitle" data-page-node-id="T2t6NEA6ZWxpL7i1S0M9pC">纯前端 · 直连公共 MQTT Broker</p>
+        </div>
+      </div>
+      <div class="status" id="status" data-state="offline" data-page-node-id="H35pwdI7OmziXwMUI6CvRU">
+        <span class="dot" data-page-node-id="ClmcIOnieZ3MmdcRPeCgC9"></span>
+        <span class="status-text" id="statusText" data-page-node-id="3BnpK1EX6ZhnYXB7EyL615">未连接</span>
+      </div>
+    </header>
+
+    <!-- 设置条 -->
+    <section class="settings" id="settings" data-page-node-id="FVT1twBoRarEa2yYCwMYCw">
+      <div class="field" data-page-node-id="W3zA0z8fOSdAwealTcwAmN">
+        <label for="roomInput" data-page-node-id="JkclXCCo6qzPwDBXWX3f1y">房间</label>
+        <input id="roomInput" type="text" placeholder="例如 demo / team-a / 任意字符串" autocomplete="off" data-page-node-id="2ZnrrR8xOOtziCVGOwRX3D" />
+      </div>
+      <div class="field" data-page-node-id="2yfb6zSqNaZ0KOhepxYRGU">
+        <label for="nameInput" data-page-node-id="bnDrQTQlspQdNfBFlRCKto">昵称</label>
+        <input id="nameInput" type="text" placeholder="你的昵称" autocomplete="off" maxlength="20" data-page-node-id="1ORQCa1dPRWlYjJx6ldJyT" />
+      </div>
+      <button class="btn primary" id="connectBtn" data-page-node-id="5sKx815hcHoStmcvhTtVJp">连接</button>
+      <button class="btn ghost" id="toggleAdvanced" data-page-node-id="gMTUp4PmcMOyzej71dkGGO">高级</button>
+    </section>
+
+    <!-- 高级设置（Broker 可自定义） -->
+    <section class="advanced hidden" id="advanced" data-page-node-id="BONSAwGtqaEzsQP1YhGemY">
+      <div class="field wide" data-page-node-id="w2imCa5WB01tUhRWbK1vOM">
+        <label for="brokerInput" data-page-node-id="lSQ5kPoD3nXwstzgFaHg4b">Broker (wss)</label>
+        <input id="brokerInput" type="text" placeholder="wss://broker.hivemq.com:8884/mqtt" autocomplete="off" data-page-node-id="AYnFwSxAnJXQuKrvsZiwv1" />
+      </div>
+      <p class="hint" data-page-node-id="CDmTEAzro1S1nLSNeqGNQY">默认依次尝试 HiveMQ / EMQX 公共 Broker；可自行替换为私有 Broker。公共 Broker 上的消息任何人都能订阅，请勿发送隐私。</p>
+    </section>
+
+    <!-- 在线成员 -->
+    <section class="members" id="membersWrap" data-page-node-id="9KHwkYajTopRmjXt0FKRPJ">
+      <span class="members-label" data-page-node-id="FFoOJZes0Hw5beR7Up1yVG">在线</span>
+      <span id="members" data-page-node-id="VG6WlrSydQCq9v4dqCTD9N">—</span>
+    </section>
+
+    <!-- 消息区 -->
+    <main class="messages" id="messages" aria-live="polite" data-page-node-id="4AEl3VGHwx4YKTAJBq2xPy"></main>
+
+    <!-- 输入区 -->
+    <footer class="composer" data-page-node-id="hAjEdJtvL6qj5R1XsDzyNa">
+      <input id="msgInput" type="text" placeholder="连接后输入消息，回车发送…" autocomplete="off" disabled data-page-node-id="86IdUz2Ng7kiUUkMRcpy34" />
+      <button class="btn primary send" id="sendBtn" disabled data-page-node-id="zLPIppYqrrnghD1ZJz1PPd">发送</button>
+    </footer>
+  </div>
+
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
