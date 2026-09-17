@@ -24,9 +24,13 @@ html, body {
 }
 
 .app {
+  position: relative;
   max-width: 760px;
   margin: 0 auto;
-  min-height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -138,13 +142,13 @@ html, body {
 
 /* 消息区 */
 .messages {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 6px 4px;
-  min-height: 240px;
 }
 .msg {
   max-width: 78%;
@@ -172,6 +176,27 @@ html, body {
   text-align: center;
 }
 
+/* 回到底部按钮（上翻看历史时浮现） */
+.scroll-bottom {
+  position: absolute;
+  right: 22px;
+  bottom: 88px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.scroll-bottom.show { display: inline-flex; }
+.scroll-bottom:active { transform: translateY(2px); }
+
 /* 输入区 */
 .composer {
   display: flex;
@@ -193,3 +218,36 @@ html, body {
 }
 .composer input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .composer .send { align-self: stretch; }
+
+/* 表情按钮 + 面板 */
+.emoji-btn { flex: 0 0 auto; font-size: 18px; padding: 10px 12px; line-height: 1; }
+.emoji-panel {
+  position: absolute;
+  left: 12px;
+  bottom: calc(100% + 8px);
+  width: 304px;
+  max-width: calc(100% - 24px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  z-index: 20;
+  max-height: 224px;
+  overflow-y: auto;
+}
+.emoji-panel.hidden { display: none; }
+.emoji-panel button {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  padding: 6px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.emoji-panel button:hover { background: var(--accent-soft); }

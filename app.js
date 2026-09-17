@@ -22,6 +22,9 @@
   const messagesEl = $("messages");
   const msgInput = $("msgInput");
   const sendBtn = $("sendBtn");
+  const emojiBtn = $("emojiBtn");
+  const emojiPanel = $("emojiPanel");
+  const scrollBottomBtn = $("scrollBottomBtn");
 
   // 状态
   let client = null;
@@ -61,7 +64,7 @@
     div.className = "msg" + (me ? " me" : "");
     div.innerHTML = `<div class="meta"><span class="who">${escapeHtml(who)}</span><span class="time">${time}</span></div><div class="text">${escapeHtml(text)}</div>`;
     messagesEl.appendChild(div);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    appendAndScroll();
   }
 
   function renderSystem(text) {
@@ -69,7 +72,7 @@
     div.className = "msg system";
     div.textContent = text;
     messagesEl.appendChild(div);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    appendAndScroll();
   }
 
   function renderMembers() {
@@ -82,6 +85,81 @@
       membersEl.appendChild(tag);
     }
   }
+
+  // ---- 智能吸底：贴近底部才自动滚到底；上翻看历史则不打扰 ----
+  let stickToBottom = true;
+
+  function isNearBottom() {
+    const el = messagesEl;
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+  }
+
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    stickToBottom = true;
+    scrollBottomBtn.classList.remove("show");
+  }
+
+  function appendAndScroll() {
+    if (stickToBottom) {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    } else {
+      scrollBottomBtn.classList.add("show");
+    }
+  }
+
+  messagesEl.addEventListener("scroll", () => {
+    if (isNearBottom()) {
+      stickToBottom = true;
+      scrollBottomBtn.classList.remove("show");
+    } else {
+      stickToBottom = false;
+    }
+  });
+  scrollBottomBtn.addEventListener("click", scrollToBottom);
+
+  // ---- 表情选择器 ----
+  const EMOJIS = [
+    "😀","😁","😂","🤣","😊","😍","😘","😎",
+    "🤔","😅","😭","😡","👍","👎","👏","🙏",
+    "💪","🤝","❤️","💔","🔥","✨","🎉","🌟",
+    "🤖","💡","✅","❌","⭐","🌹","🌈","🍻",
+    "☕","🚀","💯","📌","💬","😴","🤯","🥳",
+    "😇","🙄","😬","👀","💰","⚡","🌍","🎯"
+  ];
+
+  function buildEmojiPanel() {
+    emojiPanel.innerHTML = "";
+    EMOJIS.forEach((e) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = e;
+      b.addEventListener("click", () => insertEmoji(e));
+      emojiPanel.appendChild(b);
+    });
+  }
+
+  function insertEmoji(em) {
+    const start = msgInput.selectionStart || 0;
+    const end = msgInput.selectionEnd || 0;
+    msgInput.value = msgInput.value.slice(0, start) + em + msgInput.value.slice(end);
+    const pos = start + em.length;
+    msgInput.focus();
+    msgInput.setSelectionRange(pos, pos);
+  }
+
+  function toggleEmojiPanel(force) {
+    const show = force !== undefined ? force : emojiPanel.classList.contains("hidden");
+    emojiPanel.classList.toggle("hidden", !show);
+  }
+
+  emojiBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleEmojiPanel();
+  });
+  document.addEventListener("click", (e) => {
+    if (!emojiPanel.contains(e.target) && e.target !== emojiBtn) toggleEmojiPanel(false);
+  });
 
   function pruneOnline() {
     const now = Date.now();
@@ -141,6 +219,7 @@
         connectBtn.textContent = "断开";
         msgInput.disabled = false;
         sendBtn.disabled = false;
+        emojiBtn.disabled = false;
         online.clear();
         online.set(myName, Date.now());
         renderMembers();
@@ -205,6 +284,8 @@
     setStatus("offline", "已断开");
     msgInput.disabled = true;
     sendBtn.disabled = true;
+    emojiBtn.disabled = true;
+    toggleEmojiPanel(false);
     connectBtn.textContent = "连接";
     renderSystem("已断开连接");
   }
@@ -229,5 +310,6 @@
   sendBtn.addEventListener("click", sendMessage);
   msgInput.addEventListener("keydown", (e) => { if (e.key === "Enter") sendMessage(); });
 
+  buildEmojiPanel();
   setStatus("offline", "未连接");
 })();

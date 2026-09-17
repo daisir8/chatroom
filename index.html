@@ -57,9 +57,14 @@
 
     <!-- 输入区 -->
     <footer class="composer" data-page-node-id="hAjEdJtvL6qj5R1XsDzyNa">
+      <button class="btn ghost emoji-btn" id="emojiBtn" type="button" title="表情" disabled>😊</button>
       <input id="msgInput" type="text" placeholder="连接后输入消息，回车发送…" autocomplete="off" disabled data-page-node-id="86IdUz2Ng7kiUUkMRcpy34" />
       <button class="btn primary send" id="sendBtn" disabled data-page-node-id="zLPIppYqrrnghD1ZJz1PPd">发送</button>
+      <div class="emoji-panel hidden" id="emojiPanel" aria-hidden="true"></div>
     </footer>
+
+    <!-- 回到底部（上翻看历史时显示） -->
+    <button class="scroll-bottom" id="scrollBottomBtn" type="button">⬇ 新消息</button>
   </div>
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
